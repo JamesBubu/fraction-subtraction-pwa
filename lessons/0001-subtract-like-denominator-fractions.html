@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>分數相減：拿走幾塊，剩下幾塊</title>
+  <meta name="description" content="小學同分母分數相減互動課程。">
+  <meta name="theme-color" content="#287a62">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="分數相減">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+  <script src="../pwa.js" defer></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #fffdf7;
+      --ink: #17211a;
+      --muted: #5e675f;
+      --line: #d9d2c0;
+      --panel: #ffffff;
+      --green: #287a62;
+      --green-2: #bfe5d8;
+      --red: #d9564a;
+      --red-2: #ffe3dd;
+      --yellow: #f6c84c;
+      --yellow-2: #fff4cc;
+      --blue: #2f66b3;
+      --blue-2: #dce9ff;
+      --shadow: 0 12px 30px rgba(24, 32, 26, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, #fff8df 0, var(--paper) 420px),
+        var(--paper);
+      line-height: 1.65;
+    }
+
+    a { color: var(--blue); }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      min-height: 82vh;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+      align-items: center;
+      gap: 36px;
+      padding: 26px 0 18px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--green);
+      font-weight: 800;
+      font-size: 1rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.35rem, 7vw, 5.8rem);
+      line-height: 1.02;
+      letter-spacing: 0;
+      max-width: 10ch;
+    }
+
+    .lead {
+      max-width: 34rem;
+      margin: 22px 0 0;
+      font-size: clamp(1.08rem, 2.2vw, 1.35rem);
+      color: #344039;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .button {
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      background: var(--ink);
+      color: white;
+      min-height: 48px;
+      padding: 10px 16px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .button.secondary {
+      background: white;
+      color: var(--ink);
+    }
+
+    .hero-visual {
+      align-self: end;
+      background: var(--panel);
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      padding: clamp(16px, 3vw, 28px);
+      box-shadow: var(--shadow);
+    }
+
+    .story {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: baseline;
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .fraction-stage {
+      display: grid;
+      gap: 16px;
+    }
+
+    .fraction-row {
+      display: grid;
+      grid-template-columns: 7rem minmax(0, 1fr);
+      align-items: center;
+      gap: 14px;
+    }
+
+    .row-label {
+      margin: 0;
+      font-size: 1.08rem;
+      font-weight: 800;
+    }
+
+    .bar {
+      display: grid;
+      min-height: 58px;
+      border: 3px solid var(--ink);
+      background: white;
+      overflow: hidden;
+    }
+
+    .piece {
+      min-width: 0;
+      border-right: 3px solid var(--ink);
+      display: grid;
+      place-items: center;
+      color: transparent;
+      font-weight: 900;
+    }
+
+    .piece:last-child { border-right: 0; }
+    .piece.start { background: var(--yellow); }
+    .piece.left { background: var(--green-2); color: var(--ink); }
+    .piece.take { background: repeating-linear-gradient(135deg, var(--red-2), var(--red-2) 8px, #ffc2b8 8px, #ffc2b8 16px); color: var(--red); }
+
+    .big-equation {
+      text-align: center;
+      font-size: clamp(2rem, 6vw, 4.1rem);
+      line-height: 1.12;
+      font-weight: 900;
+      margin-top: 18px;
+      color: var(--green);
+    }
+
+    main {
+      padding: 12px 0 56px;
+    }
+
+    section {
+      margin-top: 24px;
+      padding: clamp(18px, 3vw, 28px) 0;
+      border-top: 2px solid var(--line);
+    }
+
+    h2 {
+      font-size: clamp(1.65rem, 3.4vw, 2.8rem);
+      line-height: 1.15;
+      margin: 0 0 12px;
+      letter-spacing: 0;
+    }
+
+    .section-lead {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 62rem;
+      margin: 0 0 22px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .step {
+      background: var(--panel);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.18rem;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .explorer {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.85fr) minmax(320px, 1.15fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .controls {
+      background: var(--panel);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .control label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .control output {
+      color: var(--green);
+      min-width: 4ch;
+      text-align: right;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--green);
+    }
+
+    .board {
+      background: white;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      padding: clamp(14px, 3vw, 24px);
+      box-shadow: var(--shadow);
+    }
+
+    .interactive-bar {
+      display: grid;
+      min-height: 82px;
+      border: 3px solid var(--ink);
+      overflow: hidden;
+      margin: 14px 0;
+    }
+
+    .interactive-piece {
+      border-right: 3px solid var(--ink);
+      display: grid;
+      place-items: center;
+      font-size: clamp(0.8rem, 2.5vw, 1.05rem);
+      font-weight: 900;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .interactive-piece:last-child { border-right: 0; }
+    .interactive-piece.left { background: var(--green-2); }
+    .interactive-piece.take { background: var(--red-2); color: var(--red); }
+    .interactive-piece.empty { background: white; color: #a7a197; }
+
+    .answer-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      font-size: clamp(1.4rem, 4vw, 2.4rem);
+      font-weight: 900;
+    }
+
+    .answer-pill {
+      background: var(--yellow-2);
+      border: 2px solid var(--yellow);
+      border-radius: 8px;
+      padding: 2px 10px;
+    }
+
+    .note {
+      margin: 16px 0 0;
+      color: var(--muted);
+    }
+
+    .warning {
+      background: #fff4f1;
+      border-left: 7px solid var(--red);
+      padding: 14px 16px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 18px;
+    }
+
+    .quiz {
+      display: grid;
+      gap: 16px;
+    }
+
+    .quiz-card {
+      background: white;
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .quiz-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .quiz-question {
+      margin: 0;
+      font-size: clamp(1.75rem, 5vw, 3.2rem);
+      font-weight: 900;
+    }
+
+    .score {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .choice {
+      min-height: 56px;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      font-size: 1.35rem;
+      font-weight: 900;
+    }
+
+    .choice:hover,
+    .choice:focus-visible {
+      background: var(--blue-2);
+      outline: 3px solid rgba(47, 102, 179, 0.28);
+    }
+
+    .choice.correct {
+      background: var(--green-2);
+      border-color: var(--green);
+    }
+
+    .choice.wrong {
+      background: var(--red-2);
+      border-color: var(--red);
+    }
+
+    .feedback {
+      min-height: 3.5rem;
+      margin: 14px 0 0;
+      font-weight: 800;
+    }
+
+    .next-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+
+    .source-list {
+      display: grid;
+      gap: 10px;
+      padding-left: 1.2rem;
+    }
+
+    footer {
+      color: var(--muted);
+      padding: 28px 0 42px;
+      border-top: 2px solid var(--line);
+    }
+
+    @media (max-width: 820px) {
+      header,
+      .explorer {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        min-height: auto;
+        padding-top: 28px;
+      }
+
+      .hero-visual {
+        align-self: auto;
+      }
+
+      .steps,
+      .choices {
+        grid-template-columns: 1fr;
+      }
+
+      .fraction-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+    }
+
+    @media print {
+      body { background: white; }
+      .hero-actions,
+      .controls,
+      .quiz { display: none; }
+      header { min-height: auto; grid-template-columns: 1fr; }
+      section { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <p class="eyebrow">小學三年級數學</p>
+        <h1>分數相減</h1>
+        <p class="lead">把一個東西平分成一樣大的幾塊。拿走幾塊，就用原本的塊數減掉拿走的塊數。</p>
+        <div class="hero-actions">
+          <a class="button" href="#learn">開始看圖</a>
+          <a class="button secondary" href="../index.html">回到 Roadmap</a>
+          <a class="button secondary" href="../reference/0001-fraction-subtraction-cheat-sheet.html">打開小抄</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-label="五分之八拿走二分之八的圖像示範">
+        <div class="story">
+          <span>故事：一條蛋糕切成 8 塊</span>
+          <span>吃掉 2 塊</span>
+        </div>
+        <div class="fraction-stage">
+          <div class="fraction-row">
+            <p class="row-label">原本有</p>
+            <div class="bar" style="grid-template-columns: repeat(8, 1fr);" aria-label="八等分中有五塊">
+              <span class="piece start">1</span><span class="piece start">2</span><span class="piece start">3</span><span class="piece start">4</span>
+              <span class="piece start">5</span><span class="piece"></span><span class="piece"></span><span class="piece"></span>
+            </div>
+          </div>
+          <div class="fraction-row">
+            <p class="row-label">拿走後</p>
+            <div class="bar" style="grid-template-columns: repeat(8, 1fr);" aria-label="拿走兩塊後剩三塊">
+              <span class="piece left">1</span><span class="piece left">2</span><span class="piece left">3</span><span class="piece take">拿</span>
+              <span class="piece take">拿</span><span class="piece"></span><span class="piece"></span><span class="piece"></span>
+            </div>
+          </div>
+        </div>
+        <div class="big-equation">5/8 - 2/8 = 3/8</div>
+      </div>
+    </header>
+
+    <main>
+      <section id="learn" aria-labelledby="learn-title">
+        <h2 id="learn-title">先懂一句話</h2>
+        <p class="section-lead">同分母的分數相減，就是「同樣大小的幾塊」在相減。分母告訴我們一整個被切成幾等分；分子告訴我們有幾塊。</p>
+
+        <div class="steps">
+          <article class="step">
+            <strong>1. 看下面</strong>
+            <p>分母一樣，代表每一塊一樣大，才可以直接拿來減。</p>
+          </article>
+          <article class="step">
+            <strong>2. 減上面</strong>
+            <p>只減分子：有幾塊，拿走幾塊，剩下幾塊。</p>
+          </article>
+          <article class="step">
+            <strong>3. 留下面</strong>
+            <p>分母不變，因為切法沒有改變，還是同樣大小的塊。</p>
+          </article>
+        </div>
+
+        <div class="warning">
+          <strong>小心：</strong>不要把分母也相減。`5/8 - 2/8` 不是 `3/0`。下面的 8 是「切成 8 等分」，蛋糕不會突然變成 0 等分。
+        </div>
+      </section>
+
+      <section aria-labelledby="try-title">
+        <h2 id="try-title">自己動手試</h2>
+        <p class="section-lead">移動下面的數字，看看分數條怎麼變。綠色是剩下的，紅色是拿走的。</p>
+
+        <div class="explorer">
+          <div class="controls" aria-label="分數相減控制區">
+            <div class="control">
+              <label for="denominator">一整個切成幾塊 <output id="denominatorOut">8</output></label>
+              <input id="denominator" type="range" min="3" max="10" value="8">
+            </div>
+            <div class="control">
+              <label for="startPieces">原本有幾塊 <output id="startOut">5</output></label>
+              <input id="startPieces" type="range" min="1" max="8" value="5">
+            </div>
+            <div class="control">
+              <label for="takePieces">拿走幾塊 <output id="takeOut">2</output></label>
+              <input id="takePieces" type="range" min="0" max="5" value="2">
+            </div>
+          </div>
+
+          <div class="board">
+            <strong id="boardTitle">5/8 - 2/8</strong>
+            <div id="interactiveBar" class="interactive-bar" aria-label="互動分數條"></div>
+            <div class="answer-line" aria-live="polite">
+              <span id="equationText">5/8 - 2/8 =</span>
+              <span class="answer-pill" id="answerText">3/8</span>
+            </div>
+            <p class="note" id="reasonText">因為 5 塊拿走 2 塊，剩下 3 塊；每一塊仍然是八分之一。</p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="quiz-title">
+        <h2 id="quiz-title">小測驗</h2>
+        <p class="section-lead">不用急，先在心裡想「拿走幾塊，剩下幾塊」，再按答案。</p>
+
+        <div class="quiz">
+          <div class="quiz-card">
+            <div class="quiz-top">
+              <p class="quiz-question" id="quizQuestion">4/6 - 1/6 = ?</p>
+              <span class="score" id="quizScore">第 1 題 / 共 5 題</span>
+            </div>
+            <div class="choices" id="choices" aria-label="答案選項"></div>
+            <p class="feedback" id="feedback" aria-live="polite">選一個答案。</p>
+            <div class="next-row">
+              <button class="button secondary" id="nextButton" type="button">下一題</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="review-title">
+        <h2 id="review-title">今天記住這個</h2>
+        <p class="section-lead">同分母分數相減時，每一塊一樣大，所以只要算「塊數」變少多少。分母留下來，告訴我們每一塊的名字。</p>
+        <p><a href="../reference/0001-fraction-subtraction-cheat-sheet.html">看一頁小抄</a>。學會後，可以接著看 <a href="0002-subtract-unlike-denominator-fractions.html">第二課：分母不一樣的分數相減</a>。如果哪一題看不懂，可以回來問 Codex 老師：「為什麼這題分母不變？」</p>
+      </section>
+
+      <section aria-labelledby="sources-title">
+        <h2 id="sources-title">參考來源</h2>
+        <ul class="source-list">
+          <li><a href="https://priori.moe.gov.tw/upload/page/resource/material/math/grade3/3-1-8.pdf">教育部因材網三年級數學學習教材 3-1-8</a></li>
+          <li><a href="https://www.junyiacademy.org/topics/menfs">均一教育平台：三年級同分母分數加減</a></li>
+          <li><a href="https://www.nctm.org/Classroom-Resources/Illuminations/Interactives/Fraction-Models/">NCTM Illuminations: Fraction Models</a></li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      本頁是一個短 lesson：目標是先學會同分母分數相減。下一步才適合練習更多生活題。
+    </footer>
+  </div>
+
+  <script>
+    const denominatorInput = document.querySelector("#denominator");
+    const startInput = document.querySelector("#startPieces");
+    const takeInput = document.querySelector("#takePieces");
+    const denominatorOut = document.querySelector("#denominatorOut");
+    const startOut = document.querySelector("#startOut");
+    const takeOut = document.querySelector("#takeOut");
+    const interactiveBar = document.querySelector("#interactiveBar");
+    const boardTitle = document.querySelector("#boardTitle");
+    const equationText = document.querySelector("#equationText");
+    const answerText = document.querySelector("#answerText");
+    const reasonText = document.querySelector("#reasonText");
+
+    function syncRanges() {
+      const denominator = Number(denominatorInput.value);
+      startInput.max = String(denominator);
+      if (Number(startInput.value) > denominator) startInput.value = String(denominator);
+      takeInput.max = String(startInput.value);
+      if (Number(takeInput.value) > Number(startInput.value)) takeInput.value = startInput.value;
+    }
+
+    function renderExplorer() {
+      syncRanges();
+      const denominator = Number(denominatorInput.value);
+      const start = Number(startInput.value);
+      const take = Number(takeInput.value);
+      const left = start - take;
+
+      denominatorOut.value = denominator;
+      startOut.value = start;
+      takeOut.value = take;
+      boardTitle.textContent = `${start}/${denominator} - ${take}/${denominator}`;
+      equationText.textContent = `${start}/${denominator} - ${take}/${denominator} =`;
+      answerText.textContent = `${left}/${denominator}`;
+      reasonText.textContent = `因為 ${start} 塊拿走 ${take} 塊，剩下 ${left} 塊；每一塊仍然是 ${denominator} 分之一。`;
+
+      interactiveBar.style.gridTemplateColumns = `repeat(${denominator}, minmax(0, 1fr))`;
+      interactiveBar.innerHTML = "";
+
+      for (let index = 1; index <= denominator; index += 1) {
+        const piece = document.createElement("span");
+        piece.className = "interactive-piece";
+
+        if (index <= left) {
+          piece.classList.add("left");
+          piece.textContent = String(index);
+        } else if (index <= start) {
+          piece.classList.add("take");
+          piece.textContent = "拿";
+        } else {
+          piece.classList.add("empty");
+          piece.textContent = "";
+        }
+
+        interactiveBar.append(piece);
+      }
+    }
+
+    [denominatorInput, startInput, takeInput].forEach((input) => {
+      input.addEventListener("input", renderExplorer);
+    });
+
+    const quizItems = [
+      { question: "4/6 - 1/6 = ?", answer: "3/6", choices: ["3/6", "2/6", "3/5"], reason: "4 塊拿走 1 塊，剩下 3 塊；分母還是 6。" },
+      { question: "5/8 - 2/8 = ?", answer: "3/8", choices: ["3/8", "7/8", "3/6"], reason: "5 塊拿走 2 塊，剩下 3 塊；分母還是 8。" },
+      { question: "7/9 - 3/9 = ?", answer: "4/9", choices: ["4/9", "3/9", "4/6"], reason: "7 塊拿走 3 塊，剩下 4 塊；分母還是 9。" },
+      { question: "3/5 - 1/5 = ?", answer: "2/5", choices: ["2/5", "4/5", "2/4"], reason: "3 塊拿走 1 塊，剩下 2 塊；分母還是 5。" },
+      { question: "6/7 - 4/7 = ?", answer: "2/7", choices: ["2/7", "2/3", "4/7"], reason: "6 塊拿走 4 塊，剩下 2 塊；分母還是 7。" }
+    ];
+
+    let quizIndex = 0;
+    let answered = false;
+    let correctCount = 0;
+
+    const quizQuestion = document.querySelector("#quizQuestion");
+    const quizScore = document.querySelector("#quizScore");
+    const choices = document.querySelector("#choices");
+    const feedback = document.querySelector("#feedback");
+    const nextButton = document.querySelector("#nextButton");
+
+    function renderQuiz() {
+      const item = quizItems[quizIndex];
+      answered = false;
+      quizQuestion.textContent = item.question;
+      quizScore.textContent = `第 ${quizIndex + 1} 題 / 共 ${quizItems.length} 題`;
+      feedback.textContent = "選一個答案。";
+      choices.innerHTML = "";
+      nextButton.disabled = true;
+      nextButton.textContent = quizIndex === quizItems.length - 1 ? "看結果" : "下一題";
+
+      item.choices.forEach((choice) => {
+        const button = document.createElement("button");
+        button.className = "choice";
+        button.type = "button";
+        button.textContent = choice;
+        button.addEventListener("click", () => checkAnswer(button, choice));
+        choices.append(button);
+      });
+    }
+
+    function checkAnswer(button, choice) {
+      if (answered) return;
+      answered = true;
+      const item = quizItems[quizIndex];
+      const isCorrect = choice === item.answer;
+      if (isCorrect) correctCount += 1;
+
+      Array.from(choices.children).forEach((child) => {
+        child.disabled = true;
+        if (child.textContent === item.answer) child.classList.add("correct");
+      });
+
+      if (isCorrect) {
+        feedback.textContent = `答對了。${item.reason}`;
+      } else {
+        button.classList.add("wrong");
+        feedback.textContent = `再看一次。正確是 ${item.answer}。${item.reason}`;
+      }
+
+      nextButton.disabled = false;
+    }
+
+    nextButton.addEventListener("click", () => {
+      if (quizIndex < quizItems.length - 1) {
+        quizIndex += 1;
+        renderQuiz();
+      } else {
+        quizQuestion.textContent = `完成：${correctCount} / ${quizItems.length}`;
+        quizScore.textContent = "小測驗結束";
+        choices.innerHTML = "";
+        feedback.textContent = correctCount === quizItems.length
+          ? "很穩。你已經會用「拿走幾塊，剩下幾塊」來做同分母分數相減。"
+          : "回到上面的分數條，再做一次。重點是：分母不變，只減分子。";
+        nextButton.disabled = false;
+        nextButton.textContent = "再做一次";
+        quizIndex = 0;
+        correctCount = 0;
+      }
+    });
+
+    renderExplorer();
+    renderQuiz();
+  </script>
+</body>
+</html>

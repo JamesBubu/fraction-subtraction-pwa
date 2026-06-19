@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>異分母分數相減小抄</title>
+  <meta name="description" content="異分母分數相減快速複習小抄。">
+  <meta name="theme-color" content="#287a62">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="分數相減">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+  <script src="../pwa.js" defer></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17211a;
+      --muted: #5d675f;
+      --paper: #fffdf7;
+      --line: #d8d1c0;
+      --green: #287a62;
+      --blue: #2f66b3;
+      --yellow: #f6c84c;
+      --red: #d9564a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.7;
+    }
+
+    main {
+      width: min(920px, calc(100% - 32px));
+      margin: 32px auto;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.1;
+      margin: 0 0 12px;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 28px 0 10px;
+      padding-top: 16px;
+      border-top: 2px solid var(--line);
+      font-size: 1.35rem;
+    }
+
+    p, li { font-size: 1.08rem; }
+
+    .rule {
+      background: white;
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      margin: 18px 0;
+    }
+
+    .formula {
+      text-align: center;
+      color: var(--green);
+      font-weight: 900;
+      font-size: clamp(1.75rem, 6vw, 3.5rem);
+      line-height: 1.3;
+    }
+
+    .grid-pair {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      min-height: 48px;
+      border: 2px solid var(--ink);
+      background: white;
+    }
+
+    .strip span {
+      border-right: 2px solid var(--ink);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .strip span:last-child { border-right: 0; }
+    .fill { background: var(--yellow); }
+    .take { background: #ffe3dd; color: var(--red); }
+    .left { background: #bfe5d8; }
+
+    .caption { color: var(--muted); margin: 6px 0 0; }
+
+    .mistake {
+      border-left: 6px solid var(--red);
+      background: #fff4f1;
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    @media (max-width: 680px) {
+      .grid-pair { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: white; }
+      main { margin: 12mm auto; width: auto; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>異分母分數相減小抄</h1>
+    <p>分母不一樣，表示切法不一樣。先把它們切成同樣大小的小塊，才能相減。</p>
+
+    <section class="rule" aria-label="異分母分數相減規則">
+      <div class="formula">3/4 - 1/2<br>= 3/4 - 2/4<br>= 1/4</div>
+    </section>
+
+    <h2>三步驟</h2>
+    <ol>
+      <li>找共同分母：找一個兩邊都能切成的數。</li>
+      <li>變成同分母：把兩個分數改寫成一樣的分母。</li>
+      <li>再相減：同分母後，只減分子，分母留下。</li>
+    </ol>
+
+    <h2>用圖看</h2>
+    <div class="grid-pair">
+      <div>
+        <div class="strip" aria-hidden="true">
+          <span class="fill">1</span><span class="fill">2</span><span class="fill">3</span><span></span>
+        </div>
+        <p class="caption">3/4：四等分中的 3 塊。</p>
+      </div>
+      <div>
+        <div class="strip" aria-hidden="true">
+          <span class="take">拿</span><span class="take">拿</span><span class="left">剩</span><span></span>
+        </div>
+        <p class="caption">1/2 和 2/4 一樣大，所以拿走 2 塊四分之一，剩 1/4。</p>
+      </div>
+    </div>
+
+    <h2>最容易錯的地方</h2>
+    <p class="mistake">不要直接做 `3 - 1` 和 `4 - 2`。`3/4 - 1/2` 不是 `2/2`。切法不一樣時，要先通分。</p>
+
+    <h2>回到課程</h2>
+    <p><a href="../index.html">回到 Roadmap</a>，或 <a href="../lessons/0002-subtract-unlike-denominator-fractions.html">打開互動教學頁</a>。</p>
+  </main>
+</body>
+</html>

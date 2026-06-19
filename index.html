@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>分數相減學習 Roadmap</title>
+  <meta name="description" content="適合 iPad 使用的小學分數相減互動課程。">
+  <meta name="theme-color" content="#287a62">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="分數相減">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <script src="pwa.js" defer></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #fffdf7;
+      --ink: #17211a;
+      --muted: #5d675f;
+      --line: #d9d2c0;
+      --panel: #ffffff;
+      --green: #287a62;
+      --green-2: #dff3eb;
+      --yellow: #f6c84c;
+      --yellow-2: #fff4cc;
+      --red: #d9564a;
+      --red-2: #ffe3dd;
+      --blue: #2f66b3;
+      --blue-2: #dce9ff;
+      --shadow: 0 12px 30px rgba(24, 32, 26, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, #fff4cc 0, var(--paper) 430px),
+        var(--paper);
+      line-height: 1.65;
+    }
+
+    a { color: var(--blue); }
+    button { font: inherit; }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      min-height: 70vh;
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(320px, 1.15fr);
+      align-items: center;
+      gap: 36px;
+      padding: 30px 0 20px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--green);
+      font-weight: 900;
+      font-size: 1rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 7vw, 5.5rem);
+      line-height: 1.03;
+      letter-spacing: 0;
+      max-width: 9ch;
+    }
+
+    .lead {
+      max-width: 36rem;
+      margin: 22px 0 0;
+      font-size: clamp(1.08rem, 2.2vw, 1.35rem);
+      color: #344039;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .button {
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      background: var(--ink);
+      color: white;
+      min-height: 48px;
+      padding: 10px 16px;
+      font-weight: 900;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .button.secondary {
+      background: white;
+      color: var(--ink);
+    }
+
+    .overview {
+      background: white;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      padding: clamp(16px, 3vw, 28px);
+      box-shadow: var(--shadow);
+    }
+
+    .mini-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      color: var(--muted);
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .fraction-demo {
+      display: grid;
+      gap: 16px;
+    }
+
+    .demo-row {
+      display: grid;
+      grid-template-columns: 8rem minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+    }
+
+    .demo-row p {
+      margin: 0;
+      font-weight: 900;
+    }
+
+    .bar {
+      display: grid;
+      min-height: 52px;
+      border: 3px solid var(--ink);
+      background: white;
+      overflow: hidden;
+    }
+
+    .piece {
+      border-right: 3px solid var(--ink);
+      min-width: 0;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .piece:last-child { border-right: 0; }
+    .fill { background: var(--yellow); }
+    .take { background: var(--red-2); color: var(--red); }
+    .left { background: var(--green-2); color: var(--green); }
+    .empty { background: white; color: #aaa194; }
+
+    .equation {
+      text-align: center;
+      font-size: clamp(1.6rem, 5vw, 3rem);
+      font-weight: 900;
+      color: var(--green);
+      margin-top: 18px;
+      line-height: 1.2;
+    }
+
+    main {
+      padding: 12px 0 56px;
+    }
+
+    section {
+      margin-top: 24px;
+      padding: clamp(18px, 3vw, 28px) 0;
+      border-top: 2px solid var(--line);
+    }
+
+    h2 {
+      font-size: clamp(1.65rem, 3.4vw, 2.8rem);
+      line-height: 1.15;
+      margin: 0 0 12px;
+      letter-spacing: 0;
+    }
+
+    .section-lead {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 64rem;
+      margin: 0 0 22px;
+    }
+
+    .roadmap {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      counter-reset: lesson;
+    }
+
+    .roadmap-item {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      background: var(--panel);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      position: relative;
+    }
+
+    .roadmap-item::before {
+      counter-increment: lesson;
+      content: counter(lesson);
+      width: 52px;
+      height: 52px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      background: var(--yellow-2);
+    }
+
+    .roadmap-item.ready::before { background: var(--green-2); }
+    .roadmap-item.next::before { background: var(--blue-2); }
+
+    .roadmap-item h3 {
+      margin: 0 0 4px;
+      font-size: 1.25rem;
+      letter-spacing: 0;
+    }
+
+    .roadmap-item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .text-link {
+      min-height: 42px;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      padding: 7px 12px;
+      display: inline-flex;
+      align-items: center;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 900;
+      background: white;
+    }
+
+    .text-link.primary {
+      background: var(--ink);
+      color: white;
+    }
+
+    .diagnostic {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.9fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .question-box,
+    .answer-box {
+      background: white;
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .question-box p {
+      margin-top: 0;
+      font-weight: 900;
+      font-size: 1.18rem;
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .choice {
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      background: white;
+      min-height: 46px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .choice:hover,
+    .choice:focus-visible {
+      background: var(--blue-2);
+      outline: 3px solid rgba(47, 102, 179, 0.25);
+    }
+
+    .answer-box strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .reference-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .install-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      background: white;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .install-panel h3 {
+      margin: 0 0 8px;
+      font-size: 1.25rem;
+    }
+
+    .install-panel p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .install-status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      border: 2px solid var(--green);
+      border-radius: 8px;
+      padding: 7px 12px;
+      color: var(--green);
+      background: var(--green-2);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .reference {
+      background: white;
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .reference h3 {
+      margin: 0 0 8px;
+      font-size: 1.18rem;
+    }
+
+    .reference p {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    footer {
+      color: var(--muted);
+      padding: 28px 0 42px;
+      border-top: 2px solid var(--line);
+    }
+
+    @media (max-width: 860px) {
+      header,
+      .diagnostic {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        min-height: auto;
+        padding-top: 28px;
+      }
+
+      .roadmap-item {
+        grid-template-columns: 56px minmax(0, 1fr);
+      }
+
+      .roadmap-item::before {
+        width: 44px;
+        height: 44px;
+      }
+
+      .links {
+        grid-column: 2;
+        justify-content: flex-start;
+      }
+
+      .reference-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .install-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .demo-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .roadmap-item {
+        grid-template-columns: 1fr;
+      }
+
+      .links {
+        grid-column: auto;
+      }
+
+      .text-link,
+      .button,
+      .install-status {
+        width: 100%;
+      }
+    }
+
+    @media print {
+      body { background: white; }
+      .hero-actions,
+      .diagnostic { display: none; }
+      header { min-height: auto; grid-template-columns: 1fr; }
+      section { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <p class="eyebrow">分數相減課程入口</p>
+        <h1>學習 Roadmap</h1>
+        <p class="lead">先看懂同樣大小的塊怎麼相減，再學會把不同大小的塊變成同一種小塊。每一課都很短，適合小學生一步一步學。</p>
+        <div class="hero-actions">
+          <a class="button" href="#roadmap">看課程順序</a>
+          <a class="button secondary" href="lessons/0001-subtract-like-denominator-fractions.html">從第一課開始</a>
+        </div>
+      </div>
+
+      <div class="overview" aria-label="分數相減課程總覽">
+        <div class="mini-title">
+          <span>核心想法</span>
+          <span>先通分，再相減</span>
+        </div>
+        <div class="fraction-demo">
+          <div class="demo-row">
+            <p>第一課</p>
+            <div class="bar" style="grid-template-columns: repeat(8, 1fr);" aria-label="五個八分之一拿走兩個八分之一">
+              <span class="piece left">1</span><span class="piece left">2</span><span class="piece left">3</span><span class="piece take">拿</span>
+              <span class="piece take">拿</span><span class="piece empty"></span><span class="piece empty"></span><span class="piece empty"></span>
+            </div>
+          </div>
+          <div class="demo-row">
+            <p>第二課</p>
+            <div class="bar" style="grid-template-columns: repeat(4, 1fr);" aria-label="三個四分之一拿走一半">
+              <span class="piece take">拿</span><span class="piece take">拿</span><span class="piece left">剩</span><span class="piece empty"></span>
+            </div>
+          </div>
+        </div>
+        <div class="equation">5/8 - 2/8 = 3/8<br>3/4 - 1/2 = 1/4</div>
+      </div>
+    </header>
+
+    <main>
+      <section id="roadmap" aria-labelledby="roadmap-title">
+        <h2 id="roadmap-title">課程順序</h2>
+        <p class="section-lead">這個順序會先建立「分數是一樣大的幾塊」的感覺，再處理分母不一樣時的通分。</p>
+
+        <div class="roadmap">
+          <article class="roadmap-item ready">
+            <div>
+              <h3>先備概念：每一塊要一樣大</h3>
+              <p>能分清楚分子是幾塊、分母是切成幾等分。</p>
+            </div>
+            <div class="links">
+              <a class="text-link" href="reference/0001-fraction-subtraction-cheat-sheet.html">看小抄</a>
+            </div>
+          </article>
+
+          <article class="roadmap-item ready">
+            <div>
+              <h3>第一課：同分母分數相減</h3>
+              <p>學會 `5/8 - 2/8 = 3/8`，理解為什麼分母不變。</p>
+            </div>
+            <div class="links">
+              <a class="text-link primary" href="lessons/0001-subtract-like-denominator-fractions.html">開始第一課</a>
+              <a class="text-link" href="reference/0001-fraction-subtraction-cheat-sheet.html">第一課小抄</a>
+            </div>
+          </article>
+
+          <article class="roadmap-item ready">
+            <div>
+              <h3>第二課：分母不一樣的分數相減</h3>
+              <p>學會 `3/4 - 1/2` 要先把 `1/2` 變成 `2/4`，再相減。</p>
+            </div>
+            <div class="links">
+              <a class="text-link primary" href="lessons/0002-subtract-unlike-denominator-fractions.html">開始第二課</a>
+              <a class="text-link" href="reference/0002-unlike-denominator-subtraction-cheat-sheet.html">第二課小抄</a>
+            </div>
+          </article>
+
+          <article class="roadmap-item next">
+            <div>
+              <h3>下一步：更多通分與約分</h3>
+              <p>之後可以練習最小公倍數、結果約分、生活題。現在先把前兩課練穩。</p>
+            </div>
+            <div class="links">
+              <a class="text-link" href="RESOURCES.md">看資源</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="diagnostic-title">
+        <h2 id="diagnostic-title">我該從哪裡開始？</h2>
+        <p class="section-lead">按一下最接近學生狀態的選項，頁面會建議下一步。</p>
+
+        <div class="diagnostic">
+          <div class="question-box">
+            <p>學生現在看到 `5/8 - 2/8` 會怎麼想？</p>
+            <div class="choice-row">
+              <button class="choice" type="button" data-result="lesson1">還不知道分母為什麼不變</button>
+              <button class="choice" type="button" data-result="lesson2">會做同分母，想學分母不同</button>
+              <button class="choice" type="button" data-result="practice">兩課都會，想多練</button>
+            </div>
+          </div>
+
+          <div class="answer-box" aria-live="polite">
+            <strong id="nextTitle">建議：從第一課開始</strong>
+            <p id="nextText">先用分數條看懂「拿走幾塊，剩下幾塊」。</p>
+            <a id="nextLink" class="text-link primary" href="lessons/0001-subtract-like-denominator-fractions.html">打開建議課程</a>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="reference-title">
+        <h2 id="reference-title">快速複習</h2>
+        <p class="section-lead">小抄適合上完課後回來看，也可以列印。</p>
+
+        <div class="reference-grid">
+          <article class="reference">
+            <h3>同分母分數相減小抄</h3>
+            <p>重點：分母一樣，只減分子。</p>
+            <a class="text-link" href="reference/0001-fraction-subtraction-cheat-sheet.html">打開小抄</a>
+          </article>
+          <article class="reference">
+            <h3>異分母分數相減小抄</h3>
+            <p>重點：分母不同，先通分，再相減。</p>
+            <a class="text-link" href="reference/0002-unlike-denominator-subtraction-cheat-sheet.html">打開小抄</a>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="ipad-title">
+        <h2 id="ipad-title">iPad 使用方式</h2>
+        <p class="section-lead">部署到網站後，用 iPad Safari 打開首頁，再把它加到主畫面，就會像 app 一樣啟動。</p>
+
+        <div class="install-panel">
+          <div>
+            <h3>加到主畫面</h3>
+            <p>在 Safari 按分享按鈕，選「加入主畫面」。第一次開過課程後，常用頁面會被快取，網路不穩時也能繼續複習。</p>
+          </div>
+          <span class="install-status" id="pwaStatus">正在檢查離線功能</span>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      這個 roadmap 是分數相減課程的最上層入口。新增課程時，先把它放進這裡，再連到 lesson 與小抄。
+    </footer>
+  </div>
+
+  <script>
+    const nextTitle = document.querySelector("#nextTitle");
+    const nextText = document.querySelector("#nextText");
+    const nextLink = document.querySelector("#nextLink");
+    const suggestions = {
+      lesson1: {
+        title: "建議：從第一課開始",
+        text: "先用分數條看懂「拿走幾塊，剩下幾塊」。",
+        href: "lessons/0001-subtract-like-denominator-fractions.html"
+      },
+      lesson2: {
+        title: "建議：接第二課",
+        text: "已經會同分母後，就可以學「先通分，再相減」。",
+        href: "lessons/0002-subtract-unlike-denominator-fractions.html"
+      },
+      practice: {
+        title: "建議：回小測驗練穩",
+        text: "先重做兩課的小測驗，再進入更多通分與約分。",
+        href: "lessons/0002-subtract-unlike-denominator-fractions.html#quiz-title"
+      }
+    };
+
+    document.querySelectorAll("[data-result]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const suggestion = suggestions[button.dataset.result];
+        nextTitle.textContent = suggestion.title;
+        nextText.textContent = suggestion.text;
+        nextLink.href = suggestion.href;
+      });
+    });
+
+    window.addEventListener("pwa-ready", () => {
+      const status = document.querySelector("#pwaStatus");
+      if (status) status.textContent = "離線功能已準備";
+    });
+  </script>
+</body>
+</html>

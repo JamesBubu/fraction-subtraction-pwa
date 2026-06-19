@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>分數相減小抄</title>
+  <meta name="description" content="同分母分數相減快速複習小抄。">
+  <meta name="theme-color" content="#287a62">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="分數相減">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+  <script src="../pwa.js" defer></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17211a;
+      --muted: #59645d;
+      --paper: #fffdf7;
+      --line: #d7d1bf;
+      --green: #277a62;
+      --yellow: #f7c948;
+      --red: #d9564a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.7;
+    }
+
+    main {
+      width: min(900px, calc(100% - 32px));
+      margin: 32px auto;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.1;
+      margin: 0 0 16px;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin: 30px 0 10px;
+      border-top: 2px solid var(--line);
+      padding-top: 18px;
+    }
+
+    p, li { font-size: 1.08rem; }
+
+    .rule {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 18px;
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .formula {
+      font-size: clamp(2rem, 8vw, 4rem);
+      font-weight: 800;
+      text-align: center;
+      color: var(--green);
+      line-height: 1.2;
+    }
+
+    .bars {
+      display: grid;
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .bar {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      border: 2px solid var(--ink);
+      min-height: 42px;
+    }
+
+    .bar span {
+      border-right: 2px solid var(--ink);
+      background: #ffffff;
+    }
+
+    .bar span:last-child { border-right: 0; }
+    .bar .start { background: var(--yellow); }
+    .bar .take { background: var(--red); }
+    .bar .left { background: #80c7b2; }
+
+    .caption {
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .mistake {
+      border-left: 6px solid var(--red);
+      padding: 8px 14px;
+      background: #fff4f1;
+    }
+
+    @media print {
+      body { background: white; }
+      main { margin: 12mm auto; width: auto; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>分數相減小抄</h1>
+    <p>先看「每一塊有沒有一樣大」。如果分母一樣，代表切法一樣，每一塊一樣大。</p>
+
+    <section class="rule" aria-label="同分母分數相減規則">
+      <div class="formula">5/8 - 2/8 = 3/8</div>
+      <p><strong>想法：</strong>原本有 5 塊八分之一，拿走 2 塊八分之一，剩下 3 塊八分之一。</p>
+    </section>
+
+    <h2>三步驟</h2>
+    <ol>
+      <li>看分母：兩個分母要一樣。</li>
+      <li>減分子：上面的數字相減。</li>
+      <li>留分母：下面的數字不變，因為每一塊的大小沒有變。</li>
+    </ol>
+
+    <h2>用圖看</h2>
+    <div class="bars" aria-label="八等分分數條">
+      <div>
+        <div class="bar" aria-hidden="true">
+          <span class="start"></span><span class="start"></span><span class="start"></span><span class="start"></span>
+          <span class="start"></span><span></span><span></span><span></span>
+        </div>
+        <p class="caption">5/8：先有 5 塊。</p>
+      </div>
+      <div>
+        <div class="bar" aria-hidden="true">
+          <span class="left"></span><span class="left"></span><span class="left"></span><span class="take"></span>
+          <span class="take"></span><span></span><span></span><span></span>
+        </div>
+        <p class="caption">拿走 2 塊，剩下 3 塊，所以是 3/8。</p>
+      </div>
+    </div>
+
+    <h2>最容易錯的地方</h2>
+    <p class="mistake">不要把分母也相減。`5/8 - 2/8` 不是 `3/0`。下面的 8 是「每一個完整物被切成 8 等分」，切法沒有改變。</p>
+
+    <h2>回到課程</h2>
+    <p><a href="../index.html">回到 Roadmap</a>，或 <a href="../lessons/0001-subtract-like-denominator-fractions.html">打開互動教學頁</a>。</p>
+  </main>
+</body>
+</html>

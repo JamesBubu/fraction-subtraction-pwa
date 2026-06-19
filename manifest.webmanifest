@@ -1,0 +1,48 @@
+{
+  "name": "分數相減學習 Roadmap",
+  "short_name": "分數相減",
+  "description": "適合 iPad 使用的小學分數相減互動課程。",
+  "lang": "zh-Hant",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fffdf7",
+  "theme_color": "#287a62",
+  "categories": ["education", "kids"],
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "第一課",
+      "short_name": "同分母",
+      "description": "同分母分數相減",
+      "url": "./lessons/0001-subtract-like-denominator-fractions.html"
+    },
+    {
+      "name": "第二課",
+      "short_name": "異分母",
+      "description": "分母不一樣的分數相減",
+      "url": "./lessons/0002-subtract-unlike-denominator-fractions.html"
+    }
+  ]
+}
