@@ -18,16 +18,16 @@
   }
   function renderLongGame(root, onComplete) {
     if (!root || !root.appendChild) throw new TypeError('renderLongGame requires a container element');
-    installStyle(); let stage = 0, feedback = '', hint = false;
+    installStyle(); let stage = 0, feedback = '', hint = 0;
     function paint() {
       const done = stage === 2;
       const choice = stage === 0 ? 34 : 164;
       const correct = stage === 0 ? 1 : 9;
       const scene = stage === 0 ? `
         <div class="ld-label">先觀察十位</div><h3>344 是多少？</h3>
-        <p>可以想成 <b>34 個十</b>，和 <b>4 個一</b>。先把 34 個十分成每份 18 個十。</p>
-        <div class="ld-tiles"><div class="ld-tile"><strong>34</strong>個十</div><div class="ld-tile orange"><strong>18</strong>個十／份</div></div>
-        <div class="ld-note">每次拿出 18 個十，最多能拿出幾次？商寫在十位，代表幾個十組。</div>` : stage === 1 ? `
+        <p>可以想成 <b>34 個十</b>，和 <b>4 個一</b>。每組仍然是 18 個；先試著一次做 10 組，會用掉 180 個，也就是 18 個十。</p>
+        <div class="ld-tiles"><div class="ld-tile"><strong>34</strong>個十</div><div class="ld-tile orange"><strong>18</strong>個十／10 組</div></div>
+        <div class="ld-note">每一批做 10 組，需要 18 個十。看看 34 個十最多能做幾批；批數寫在商的十位。</div>` : stage === 1 ? `
         <div class="ld-label">把剩下的十換成一</div><h3>現在輪到個位</h3>
         <p>拿出 <b>18 個十</b>後，剩下 16 個十；換成 160 個一，再加上原本 4 個一。</p>
         <div class="ld-tiles"><div class="ld-tile"><strong>16 個十</strong>＝ 160 個一</div><div class="ld-tile orange"><strong>＋ 4</strong>個一</div><div class="ld-tile pink"><strong>164</strong>個一</div></div>
@@ -43,26 +43,27 @@
       </div>`;
       root.innerHTML = `<section class="ld-game" aria-label="除法直式互動遊戲">
         <div class="ld-board"><div class="ld-paper"><div class="ld-label">除法紀錄</div>${grid}</div><div class="ld-place">${scene}</div></div>
-        ${!done ? `<div class="ld-question">${stage === 0 ? '第 1 步：34 個十裡，最多有幾份 18 個十？' : '第 2 步：164 裡最多有幾個 18？'}</div><p class="ld-prompt">點一個數字試試看；猜錯也沒關係。</p><div class="ld-options" role="group" aria-label="選擇商的數字">${Array.from({length:10},(_,i)=>`<button class="ld-num" type="button" data-choice="${i}" aria-label="試 ${i}">${i}</button>`).join('')}</div>` : `<div class="ld-question">✨ 完成任務：344 ÷ 18 ＝ 19 餘 2</div>`}
+        ${!done ? `<div class="ld-question">${stage === 0 ? '第 1 步：一次做 10 組，34 個十最多能做幾批？' : '第 2 步：164 裡最多有幾個 18？'}</div><p class="ld-prompt">點一個數字試試看；猜錯也沒關係。</p><div class="ld-options" role="group" aria-label="選擇商的數字">${Array.from({length:10},(_,i)=>`<button class="ld-num" type="button" data-choice="${i}" aria-label="試 ${i}">${i}</button>`).join('')}</div>` : `<div class="ld-question">✨ 完成任務：344 ÷ 18 ＝ 19 餘 2</div>`}
         <div tabindex="-1" class="ld-feedback ${done?'success':''}" role="status" aria-live="polite">${feedback || (done ? '你讓每一步都有了理由！' : '可以先猜一個數字，再用乘法檢查。')}</div>
         <div class="ld-actions">${!done?'<button type="button" class="ld-help" data-action="hint">💡 給我提示</button>':''}<button type="button" class="ld-reset" data-action="reset">↺ 重新探索</button></div></section>`;
       root.querySelectorAll('[data-choice]').forEach(button => button.addEventListener('click', () => {
         const picked = Number(button.dataset.choice), product = picked * 18;
         if (picked === correct) {
-          if (stage === 0) { stage = 1; feedback = '答對了！18 × 1＝18；34－18＝16。這個 1 寫在十位，表示 10 組。'; }
+          if (stage === 0) { stage = 1; feedback = '答對了！18 × 10 組＝180 個；344－180＝164 個。直式的 34－18＝16 都以『十』為單位，商的 1 表示 10 組。'; }
           else { stage = 2; feedback = '答對了！18 × 9＝162，164－162＝2。'; if (typeof onComplete === 'function') onComplete(); }
-          hint = false;
-        } else if (product > choice) feedback = `試 ${picked}：18 × ${picked}＝${product}，超過 ${choice} 了。試小一點。`;
+          hint = 0;
+        } else if (stage === 0) feedback = product > choice ? `試 ${picked} 批＝${picked * 10} 組，需要 ${product * 10} 個，超過 344 個；每組仍是 18 個。試少一批。` : `試 ${picked} 批＝${picked * 10} 組，用掉 ${product * 10} 個，還有 ${344-product*10} 個，還夠再做 10 組（180 個）。`;
+        else if (product > choice) feedback = `試 ${picked}：18 × ${picked}＝${product}，超過 ${choice} 了。試小一點。`;
         else feedback = `試 ${picked}：18 × ${picked}＝${product}，還剩 ${choice-product}；剩下的至少還有 18，還能再分一份。`;
         paint();
         const announcement = root.querySelector('.ld-feedback'); if (announcement) announcement.focus();
       }));
       const hintButton = root.querySelector('[data-action="hint"]');
-      if (hintButton) hintButton.addEventListener('click', () => { hint = true; feedback = stage === 0 ? '比較 18 × 1 與 18 × 2：哪一個沒有超過 34？' : '先試 18 × 10＝180，再想想 18 × 9 會是多少。'; paint(); });
-      root.querySelector('[data-action="reset"]').addEventListener('click', () => {stage=0;feedback='';hint=false;paint();});
+      if (hintButton) hintButton.addEventListener('click', () => { hint++; const hints = stage === 0 ? ['每組 18 個。做 10 組、20 組各需要多少？', '看十位圖卡：一批 10 組要 18 個十；兩批要 36 個十。原本有 34 個十和 4 個一。', '10 組用掉 180 個，20 組需要 360 個，超過 344。所以商的十位寫 1。'] : ['剩下 164 個，每組仍要 18 個。先估一個組數，再乘回去。', '10 組要 180 個，超過 164；少做一組會少用 18 個。', '18 × 9＝162，剩 2 個，不夠再做一組，所以個位寫 9。']; feedback = hints[Math.min(hint - 1, 2)]; paint(); });
+      root.querySelector('[data-action="reset"]').addEventListener('click', () => {stage=0;feedback='';hint=0;paint();});
     }
     paint();
-    return { reset() { stage=0; feedback=''; hint=false; paint(); } };
+    return { reset() { stage=0; feedback=''; hint=0; paint(); } };
   }
   window.renderLongGame = renderLongGame;
 })();
