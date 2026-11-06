@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#dcefeb"><meta name="description" content="旋轉小島、拜訪地標，動手探索除法、位值、乘法與分數。"><title>兔兔的數學冒險島</title><link rel="stylesheet" href="island.css"><script defer src="animation-state.js"></script><script defer src="scene3d.js"></script><script defer src="island.js"></script></head>
+<body>
+<header class="topbar"><a class="brand" href="../index.html"><span class="brand-icon">❋</span> 兔兔的數學冒險島</a><div class="header-tools"><span id="progress">探險手冊 0 / 4</span><button id="motion" aria-pressed="false">暫停動態</button></div></header>
+<main id="home">
+<section class="intro"><div><p class="eyebrow">一座小島，四個數學發現</p><h1>今天，讓好奇心帶路。</h1><p>轉一轉小島，選一個地方。<br class="mobile-only">和兔兔動手試，把數學看明白。</p></div><button class="primary" data-lesson="division">從除法港口出發 <span>↗</span></button></section>
+<section class="map-wrap" aria-label="數學冒險島地圖">
+<div class="map-sky" aria-hidden="true"><i class="cloud cloud-one"></i><i class="cloud cloud-two"></i></div>
+<div class="map-caption"><span class="live-dot"></span> 開放探索中 <small>不計時，慢慢來就好</small></div>
+<canvas id="island-3d" aria-hidden="true"></canvas>
+<svg id="island" viewBox="0 0 1100 640" role="img" aria-label="可旋轉的立體數學小島，地點也可用下方按鈕選擇"><defs><filter id="shadow"><feGaussianBlur stdDeviation="10"/></filter></defs><g id="world"></g></svg>
+<div id="landmarks"></div><div id="travel-status" role="status" aria-live="polite" hidden></div>
+<div class="map-bottom"><p>拖曳旋轉 · 滾輪縮放<br><small>觸控可單指旋轉、雙指縮放</small></p><div class="map-controls"><button id="rotate-left" aria-label="向左旋轉">↶</button><button id="rotate-right" aria-label="向右旋轉">↷</button><span></span><button id="zoom-out" aria-label="縮小">−</button><button id="zoom-in" aria-label="放大">＋</button><button id="reset-view">回全景</button></div></div>
+<div class="compass" aria-hidden="true">✦<small>探索</small></div>
+</section>
+<section class="destinations" aria-label="選擇學習地點">
+<button data-lesson="division" class="destination"><span class="number">01</span><span><b>除法港口</b><small>平均分配 × 直式</small></span><span class="stamp" data-stamp="division">↗</span></button>
+<button data-lesson="place" class="destination"><span class="number">02</span><span><b>位值工坊</b><small>十個一，換一個十</small></span><span class="stamp" data-stamp="place">↗</span></button>
+<button data-lesson="multiply" class="destination"><span class="number">03</span><span><b>乘法果園</b><small>把大問題拆小</small></span><span class="stamp" data-stamp="multiply">↗</span></button>
+<button data-lesson="fraction" class="destination"><span class="number">04</span><span><b>分數野餐地</b><small>同一份，不同切法</small></span><span class="stamp" data-stamp="fraction">↗</span></button>
+</section>
+<footer><p>每次探索一個地方，就很棒。<span id="storage-note">發現紀錄會留在這個瀏覽器。</span></p><details><summary>給陪伴的大人</summary><p>先讓孩子操作，再問「這個數字代表什麼？」。完成徽章代表操作並答對一題，不等於已熟練。可隔天換題再試，不必追求速度。</p></details><nav><a href="../division-adventure/index.html">完整除法課程 ↗</a><a href="../index.html">分數加減課程 ↗</a></nav></footer>
+</main>
+<dialog id="lesson-dialog" aria-labelledby="lesson-title"><div class="lesson-shell"><div class="lesson-top"><span id="lesson-label" class="eyebrow"></span><button id="close-lesson" aria-label="關閉課程，回到小島">回到小島 ✕</button></div><h2 id="lesson-title"></h2><p id="lesson-intro"></p><div id="lesson-content"></div><div id="feedback" role="status" aria-live="polite"></div><div id="quiz"></div><div class="lesson-foot"><span>🐇 先動手，再說說你的發現。</span><button id="restart">重新探索</button></div></div></dialog>
+</body></html>
